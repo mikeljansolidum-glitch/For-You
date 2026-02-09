@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>For Kiarra | An Eternal Bloom</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Pacifico&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --pink: #ff758f; --deep-pink: #ff4d6d; 
+            --purple: #9d4edd; --soft-purple: #e0aaff;
+            --deep-purple: #5a189a; --gold: #ffb703;
+            --glass: rgba(255, 255, 255, 0.92);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body { 
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: #fff5f8; font-family: 'Montserrat', sans-serif; 
+            overflow-x: hidden; -webkit-overflow-scrolling: touch;
+            transition: background 2s ease-in-out;
+        }
+
+        /* --- MAGIC GARDEN TRAIL --- */
+        .trail-flower {
+            position: fixed; pointer-events: none; z-index: 10002;
+            transition: transform 1.8s cubic-bezier(0.1, 0.5, 0.5, 1), opacity 1.2s;
+            will-change: transform, opacity;
+        }
+
+        /* --- THE PATH --- */
+        #path-svg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none; min-height: 8500px;
+        }
+        .arrow-line {
+            fill: none; stroke: url(#grad1); stroke-width: 8;
+            stroke-dasharray: 20, 40; opacity: 0.25; stroke-linecap: round;
+        }
+        .moving-star { font-size: 50px; fill: var(--deep-pink); filter: drop-shadow(0 0 15px var(--pink)); }
+
+        /* --- COVER --- */
+        #cover {
+            height: 100dvh; width: 100%; position: fixed; inset: 0; z-index: 9999;
+            background: radial-gradient(circle at center, #fff, #f3e5f5, #fff0f3);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: 2s cubic-bezier(0.8, 0, 0.2, 1); cursor: pointer; padding: 20px; text-align: center;
+        }
+        .bouquet { font-size: clamp(100px, 40vw, 180px); animation: float 5s infinite ease-in-out; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
+
+        /* --- CONTENT & VOIDS --- */
+        #main-content { display: none; flex-direction: column; align-items: center; position: relative; z-index: 10; width: 100%; }
+        .void { height: 1000px; width: 100%; position: relative; overflow: hidden; }
+        
+        .whisper { 
+            position: absolute; font-family: 'Great Vibes'; font-size: clamp(1.8rem, 8vw, 2.8rem); 
+            color: var(--deep-purple); opacity: 0; transition: 2.5s; 
+            transform: scale(0.8) translateY(30px); width: 90%; left: 5%; text-align: center; z-index: 5;
+        }
+        .active .whisper { opacity: 0.45; transform: scale(1.05) translateY(0); }
+
+        .drift-flower { position: absolute; pointer-events: none; will-change: transform; }
+        .layer-back { opacity: 0.15; filter: blur(3px); z-index: 2; }
+        .layer-mid { opacity: 0.35; z-index: 4; }
+        .layer-front { opacity: 0.55; z-index: 15; }
+
+        /* --- RESPONSIVE CARDS --- */
+        .glass-card {
+            width: 90%; max-width: 800px; background: var(--glass);
+            -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); 
+            border-radius: 40px; padding: 40px 20px;
+            text-align: center; border: 4px solid white;
+            box-shadow: 0 40px 80px rgba(255, 117, 143, 0.15);
+            opacity: 0; transform: translateY(100px); transition: 2s cubic-bezier(0.16, 1, 0.3, 1);
+            margin: 150px 0; z-index: 20;
+        }
+        .glass-card.active { opacity: 1; transform: translateY(0); }
+
+        .cursive-msg {
+            font-family: 'Great Vibes', cursive; font-size: clamp(3rem, 12vw, 4.5rem); 
+            background: linear-gradient(to right, var(--deep-pink), var(--purple), var(--deep-pink));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-size: 200% auto; animation: shine 4s linear infinite;
+        }
+
+        .eternal-box {
+            width: 90%; max-width: 650px; background: rgba(255, 255, 255, 0.98);
+            border-radius: 40px; padding: 45px 35px; border: 8px double var(--soft-purple);
+            font-size: 1.15rem; text-align: left; opacity: 0; transform: scale(0.95); transition: 2s;
+            margin: 100px 0; z-index: 25; line-height: 1.8;
+        }
+        .eternal-box.active { opacity: 1; transform: scale(1); }
+
+        /* --- FINALE --- */
+        #finale {
+            display: none; position: fixed; inset: 0; z-index: 10000;
+            background: radial-gradient(circle, #fff, #ffeef2, #f3e5f5);
+            flex-direction: column; align-items: center; justify-content: center; padding: 20px;
+        }
+        
+        .labubu { width: 100px; height: 130px; position: relative; animation: waddle 0.5s infinite alternate; }
+        .l-ear { position: absolute; width: 28px; height: 60px; background: var(--pink); border: 3px solid #333; border-radius: 50% 50% 15% 15%; top: -35px; }
+        .ear-l { left: 8px; transform: rotate(-18deg); } .ear-r { right: 8px; transform: rotate(18deg); }
+        .l-body { position: absolute; width: 100%; height: 95px; background: var(--pink); border: 3px solid #333; border-radius: 46%; bottom: 0; }
+        .l-face { position: absolute; width: 85%; height: 65%; background: #fff; border-radius: 50%; top: 12%; left: 7.5%; border: 2px solid #333; overflow: hidden;}
+        .eye { position:absolute; width:12px; height:12px; background:#333; border-radius:50%; top:35%; animation: blink 3s infinite; }
+        .l-mouth { 
+            position: absolute; width: 40px; height: 16px; background: #333; bottom: 15%; left: 50%; transform: translateX(-50%);
+            clip-path: polygon(0 0, 15% 100%, 30% 0, 45% 100%, 60% 0, 75% 100%, 90% 0, 100% 100%, 100% 0);
+        }
+
+        .yes-btn {
+            background: linear-gradient(45deg, var(--deep-pink), var(--purple));
+            color: white; padding: 20px 60px; border-radius: 50px; font-family: 'Pacifico'; font-size: 2rem;
+            border: none; margin-top: 40px; cursor: pointer;
+        }
+
+        @keyframes blink { 0%, 90%, 100% { height: 12px; } 95% { height: 1px; } }
+        @keyframes waddle { from { transform: rotate(-10deg); } to { transform: rotate(10deg); } }
+        @keyframes shine { to { background-position: 200% center; } }
+        @keyframes driftRotate { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(150px, 600px) rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="cover" onclick="ignite()">
+        <div class="bouquet" id="bq">💐</div>
+        <h1 style="font-family: 'Pacifico'; color: var(--pink); font-size: 3.5rem; margin: 10px 0;">For Kiarra</h1>
+        <p style="letter-spacing: 5px; color: var(--purple); font-weight: 800; font-size: 0.8rem;">TAP TO ENTER THE GARDEN</p>
+    </div>
+
+    <svg id="path-svg" viewBox="0 0 400 8500">
+        <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:var(--pink);" />
+                <stop offset="50%" style="stop-color:var(--purple);" />
+                <stop offset="100%" style="stop-color:var(--deep-pink);" />
+            </linearGradient>
+        </defs>
+        <path id="master-path" class="arrow-line" d="M 200,0 C 500,1500 -100,3000 200,4500 S 500,6500 200,8500" />
+        <text><textPath href="#master-path" startOffset="0%" id="arrow-head"><tspan class="moving-star">✦</tspan></textPath></text>
+    </svg>
+
+    <div id="main-content">
+        <div class="glass-card" style="margin-top: 100px;">
+            <div style="position:relative; padding-top: 56.25%; width:100%; border-radius: 20px; overflow:hidden;">
+                <iframe src="https://www.youtube.com/embed/Hz0qYk1WDEU" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe>
+            </div>
+            <h3 style="font-family: 'Pacifico'; color: var(--deep-pink); font-size: 1.8rem; margin-top: 25px;">play first 🤍</h3>
+        </div>
+
+        <div class="void" data-color="#fff5f8">
+            <div class="whisper" style="top: 20%;">You are the calm in my storm.</div>
+            <div class="whisper" style="top: 70%;">Like a Lily, you carry a grace that makes everything around you more beautiful</div>
+        </div>
+
+        <div class="glass-card">
+            <h2 style="font-family: 'Pacifico'; color: var(--purple); font-size: 2.2rem;">Jan 17, 2026</h2>
+            <div id="timer" style="font-size: 2rem; font-weight: 900; margin: 20px 0; background: linear-gradient(45deg, var(--deep-pink), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></div>
+        </div>
+
+        <div class="void" data-color="#f3e5f5">
+            <div class="whisper" style="top: 30%;">"The path is long, but every step leads to you."</div>
+            <div class="whisper" style="top: 80%;">A Peony for your heart...</div>
+        </div>
+
+        <div class="glass-card">
+            <p class="cursive-msg">You are<br>Inefabble.</p>
+        </div>
+
+        <div class="void" data-color="#fffdeb">
+            <div class="whisper" style="top: 25%; color: var(--gold)">A sunflower, always facing the light.</div>
+            <div class="whisper" style="top: 75%; color: var(--gold)">A Daisy for the girl who is my sunshine on even the cloudiest days.</div>
+        </div>
+
+        <div class="eternal-box">
+            <h3 style="font-family:'Pacifico'; color:var(--deep-pink)">My Dearest, Kiarra</h3>
+            <p>
+                Walking this journey with you is the greatest joy I've ever known. 
+                Every second I spend moving towards you is a second I will always cherish. You aren't just a part of my life; 
+                you are the garden that makes my life worth living. 
+                <br><br>
+                No matter how long the path gets, I promise to always be the one walking beside you, 
+                holding your hand through every petal and every breeze.
+            </p>
+            <p style="text-align: right; font-family: 'Great Vibes'; font-size: 1.8rem; color: var(--purple);">-Mikel.</p>
+        </div>
+
+        <div class="void" data-color="#fff5f8">
+            <div class="whisper" style="top: 40%;">A Lotus for you—proof that the most beautiful things grow through the toughest times.</div>
+        </div>
+
+        <div class="glass-card" style="border: 6px double var(--pink); margin-bottom: 250px;">
+            <h2 style="font-family: 'Pacifico'; color: var(--deep-pink); font-size: 2.5rem;">Kiarra...</h2>
+            <p style="font-size: 1.5rem; color: var(--deep-purple);">Will you be my Valentine?</p>
+            <button class="yes-btn" onclick="finish()">YES! ❤️</button>
+        </div>
+    </div>
+
+    <div id="finale">
+        <h1 style="font-family: 'Pacifico'; color: var(--deep-pink); font-size: 3rem;">Yeyyy!</h1>
+        <div style="display:flex; align-items:flex-end; gap:10px;">
+            <div style="font-size: 80px;">👦🏻</div>
+            <div class="labubu">
+                <div class="l-ear ear-l"></div><div class="l-ear ear-r"></div>
+                <div class="l-body">
+                    <div class="l-face">
+                        <div class="eye" style="left:22%;"></div>
+                        <div class="eye" style="right:22%;"></div>
+                        <div class="l-mouth"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p style="margin-top: 30px; font-size: 0.9rem; color: var(--deep-pink); opacity: 0.7; letter-spacing: 2px;">Message me when you're done!</p>
+    </div>
+
+    <script>
+        const flowers = ['🌷', '🌸', '🪷', '🌼', '🌻'];
+        
+        document.querySelectorAll('.void').forEach(v => {
+            for(let i=0; i<20; i++){
+                let f = document.createElement('div');
+                f.className = `drift-flower layer-mid`;
+                f.innerHTML = flowers[Math.floor(Math.random()*flowers.length)];
+                f.style.left = Math.random()*90+'%';
+                f.style.top = Math.random()*90+'%';
+                f.style.fontSize = (20 + Math.random()*30) + 'px';
+                f.style.animation = `driftRotate ${15 + Math.random()*10}s infinite linear`;
+                v.appendChild(f);
+            }
+        });
+
+        function spawnTrail(x, y) {
+            const h = document.createElement('div');
+            h.className = 'trail-flower';
+            h.innerHTML = flowers[Math.floor(Math.random()*flowers.length)];
+            h.style.left = x + 'px'; h.style.top = y + 'px';
+            h.style.fontSize = '24px';
+            document.body.appendChild(h);
+            setTimeout(() => {
+                h.style.transform = `translate(${(Math.random()-0.5)*150}px, -300px) scale(0)`;
+                h.style.opacity = '0';
+            }, 50);
+            setTimeout(() => h.remove(), 1500);
+        }
+        
+        let lastTrail = 0;
+        const trailHandler = (e) => {
+            const now = Date.now();
+            if (now - lastTrail < 60) return;
+            const x = e.clientX || (e.touches && e.touches[0].clientX);
+            const y = e.clientY || (e.touches && e.touches[0].clientY);
+            if(x && y) { spawnTrail(x, y); lastTrail = now; }
+        };
+        document.addEventListener('mousemove', trailHandler);
+        document.addEventListener('touchstart', trailHandler);
+
+        function ignite() {
+            document.getElementById('bq').style.transform = 'scale(10) rotate(360deg)';
+            document.getElementById('cover').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('cover').style.display = 'none';
+                document.getElementById('main-content').style.display = 'flex';
+                const obs = new IntersectionObserver((entries) => {
+                    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+                }, { threshold: 0.1 });
+                document.querySelectorAll('.glass-card, .void, .eternal-box').forEach(c => obs.observe(c));
+            }, 1000);
+        }
+
+        function updateTimer() {
+            const diff = new Date() - new Date("January 17, 2026");
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById('timer').innerText = `${d}d ${h}h ${m}m ${s}s`;
+        }
+        setInterval(updateTimer, 1000);
+
+        window.addEventListener('scroll', () => {
+            const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            const head = document.getElementById('arrow-head');
+            if(head) head.setAttribute('startOffset', Math.min(scrollPercent, 99) + '%');
+        });
+
+        function finish() {
+            document.getElementById('finale').style.display = 'flex';
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.style.position = 'fixed'; heart.style.left = '50%'; heart.style.top = '60%';
+                heart.style.transition = '2s'; heart.style.zIndex = '10001';
+                document.body.appendChild(heart);
+                setTimeout(() => {
+                    heart.style.transform = `translate(${(Math.random()-0.5)*200}px, -400px) scale(2)`;
+                    heart.style.opacity = '0';
+                }, 50);
+                setTimeout(() => heart.remove(), 2000);
+            }, 500);
+        }
+        
+    </script>
+</body>
+</html>
