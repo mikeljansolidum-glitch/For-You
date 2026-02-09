@@ -3,264 +3,334 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>For My Kiarra</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Great+Vibes&family=Pacifico&display=swap" rel="stylesheet">
+    <title>For Kiarra | An Eternal Bloom</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Pacifico&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
     <style>
-        :root { --pink: #ff4d6d; --deep-pink: #c9184a; --soft-pink: #ffb3c1; --gold: #ffd700; --bg: #fff0f3; }
-        
+        :root { 
+            --pink: #ff758f; --deep-pink: #ff4d6d; 
+            --purple: #9d4edd; --soft-purple: #e0aaff;
+            --deep-purple: #5a189a; --gold: #ffb703;
+            --glass: rgba(255, 255, 255, 0.9);
+        }
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { margin: 0; padding: 0; background: var(--bg); font-family: 'Dancing Script', cursive; overflow-x: hidden; scroll-behavior: smooth; }
-
-        /* --- ELEVATED DYNAMIC BACKGROUND --- */
-        #bg-canvas { position: fixed; inset: 0; z-index: -1; background: linear-gradient(180deg, #fff0f3 0%, #fce4ec 100%); }
-        .floating-heart { position: absolute; opacity: 0.4; pointer-events: none; animation: floatUp var(--d) linear infinite; filter: blur(1px); }
-        @keyframes floatUp { 
-            0% { transform: translateY(110vh) scale(0.5) rotate(0deg); opacity: 0; }
-            20% { opacity: 0.6; }
-            100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; }
+        body, html { 
+            margin: 0; padding: 0; background: #fff5f8; 
+            font-family: 'Montserrat', sans-serif; overflow-x: hidden;
+            transition: background 3s ease-in-out;
         }
 
-        /* --- COVER PAGE --- */
-        #cover-page { 
-            height: 100dvh; display: flex; flex-direction: column; justify-content: center; 
-            align-items: center; text-align: center; transition: 1.5s cubic-bezier(0.7, 0, 0.3, 1);
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+        /* --- MAGIC GARDEN TRAIL & GOLD DUST --- */
+        .trail-flower {
+            position: fixed; pointer-events: none; z-index: 10002;
+            transition: transform 1.8s cubic-bezier(0.1, 0.5, 0.5, 1), opacity 1.2s;
         }
-        .main-bouquet { font-size: 120px; cursor: pointer; animation: floating 3s infinite ease-in-out; filter: drop-shadow(0 20px 30px rgba(255,77,109,0.4)); }
-
-        /* --- CURSIVE TYPEWRITER LOGIC --- */
-        .cursive-msg { font-family: 'Great Vibes', cursive; font-size: 2.2rem; line-height: 1.4; color: var(--deep-pink); }
-        .typewriter span { opacity: 0; display: inline-block; transform: translateY(10px); animation: charFade 0.1s forwards; }
-        .typewriter span.space { margin-right: 0.35em; }
-        @keyframes charFade { to { opacity: 1; transform: translateY(0); } }
-
-        /* --- GLASS DESIGN & SCROLL REVEAL --- */
-        #main-content { display: none; flex-direction: column; align-items: center; padding: 60px 20px; gap: 60px; }
-        .glass-card { 
-            width: 100%; max-width: 500px; background: rgba(255, 255, 255, 0.4); 
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-radius: 50px; padding: 45px 30px; text-align: center; 
-            border: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 0 25px 50px rgba(255, 77, 109, 0.15);
-            opacity: 0; transform: translateY(60px) scale(0.95); transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .dust {
+            position: absolute; width: 4px; height: 4px; background: var(--gold);
+            border-radius: 50%; pointer-events: none; z-index: 2;
+            filter: blur(1px) drop-shadow(0 0 5px var(--gold));
         }
-        .glass-card.reveal { opacity: 1; transform: translateY(0) scale(1); }
 
-        /* --- FLOWER GRID --- */
-        .flower-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 30px; }
-        .flower-item { font-size: 2rem; animation: bounce 3s infinite ease-in-out; }
-        .flower-item:nth-child(even) { animation-delay: 1.5s; }
+        /* --- THE PATH (7,000px) --- */
+        #path-svg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none; min-height: 7000px;
+        }
+        .arrow-line {
+            fill: none; stroke: url(#grad1); stroke-width: 10;
+            stroke-dasharray: 25, 50; opacity: 0.3; stroke-linecap: round;
+        }
+        .moving-star { font-size: 65px; fill: var(--deep-pink); filter: drop-shadow(0 0 30px var(--pink)); }
 
-        /* --- VALENTINE CHOICE --- */
-        .btn-container { position: relative; height: 120px; display: flex; justify-content: center; align-items: center; margin-top: 20px; }
-        .fancy-btn { padding: 20px 50px; border-radius: 60px; border: none; font-family: 'Pacifico'; font-size: 1.5rem; cursor: pointer; transition: 0.5s; }
-        #yes-btn { background: var(--pink); color: white; box-shadow: 0 15px 30px rgba(255,77,109,0.5); }
-        #yes-btn:hover { transform: scale(1.1) rotate(2deg); }
-        #no-btn { background: #fff; color: #aaa; position: absolute; left: 65%; font-size: 1rem; padding: 10px 25px; }
+        /* --- COVER --- */
+        #cover {
+            height: 100dvh; width: 100%; position: fixed; inset: 0; z-index: 9999;
+            background: radial-gradient(circle at center, #fff, #f3e5f5, #fff0f3);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: 2.5s cubic-bezier(0.8, 0, 0.2, 1); cursor: pointer;
+        }
+        .bouquet { font-size: 200px; filter: drop-shadow(0 25px 60px rgba(255, 117, 143, 0.6)); animation: float 5s infinite ease-in-out; }
+        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-40px) scale(1.05); } }
+
+        /* --- CONTENT & VOIDS --- */
+        #main-content { display: none; flex-direction: column; align-items: center; position: relative; z-index: 10; width: 100%; }
+        .void { height: 1500px; width: 100%; position: relative; overflow: hidden; }
+        
+        .whisper { 
+            position: absolute; font-family: 'Great Vibes'; font-size: 3rem; 
+            color: var(--deep-purple); opacity: 0; transition: 3s cubic-bezier(0.2, 0.8, 0.2, 1); 
+            transform: scale(0.8) translateY(40px); width: 100%; text-align: center; left: 0; z-index: 5;
+        }
+        .active .whisper { opacity: 0.45; transform: scale(1.1) translateY(0); }
+
+        /* --- DEPTH FLOWERS --- */
+        .drift-flower { position: absolute; pointer-events: none; animation: driftRotate 20s infinite linear; }
+        .layer-back { opacity: 0.15; filter: blur(4px); z-index: 2; }
+        .layer-mid { opacity: 0.35; z-index: 4; }
+        .layer-front { opacity: 0.55; filter: blur(1.5px); z-index: 15; }
+
+        /* --- CURSIVE CARDS --- */
+        .glass-card {
+            width: 90%; max-width: 650px; background: var(--glass);
+            backdrop-filter: blur(50px); border-radius: 100px; padding: 120px 60px;
+            text-align: center; border: 6px solid white;
+            box-shadow: 0 80px 160px rgba(255, 117, 143, 0.2);
+            opacity: 0; transform: translateY(300px); transition: 3s cubic-bezier(0.16, 1, 0.3, 1);
+            margin: 300px 0; z-index: 20;
+        }
+        .glass-card.active { opacity: 1; transform: translateY(0); }
+
+        .cursive-msg {
+            font-family: 'Great Vibes', cursive; font-size: 5rem; 
+            background: linear-gradient(to right, var(--deep-pink), var(--purple), var(--deep-pink));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            transition: 5s cubic-bezier(0.1, 0.5, 0.1, 1); letter-spacing: -5px; 
+            background-size: 200% auto; animation: shine 4s linear infinite;
+        }
+        .active .cursive-msg { letter-spacing: 20px; text-shadow: 0 0 20px rgba(255,117,143,0.3); }
+
+        /* --- THE MESSAGE BOX --- */
+        .eternal-box {
+            width: 95%; max-width: 800px; background: rgba(255, 255, 255, 0.98);
+            border-radius: 60px; padding: 80px 50px; border: 12px double var(--soft-purple);
+            box-shadow: 0 0 100px rgba(157, 78, 221, 0.15);
+            font-family: 'Montserrat', sans-serif; line-height: 2.2; color: #333;
+            font-size: 1.35rem; text-align: left; opacity: 0; transform: scale(0.9); transition: 3s;
+            margin: 200px 0; z-index: 25;
+        }
+        .eternal-box.active { opacity: 1; transform: scale(1); }
 
         /* --- FINALE --- */
-        #celebration { 
-            display: none; position: fixed; inset: 0; background: radial-gradient(circle, #fff0f3, #f8bbd0); 
-            z-index: 1000; flex-direction: column; align-items: center; justify-content: center; 
+        #finale {
+            display: none; position: fixed; inset: 0; z-index: 10000;
+            background: radial-gradient(circle, #fff, #ffeef2, #f3e5f5);
+            flex-direction: column; align-items: center; justify-content: center;
         }
-        .char-group { display: flex; align-items: flex-end; gap: 40px; animation: popUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        .me-guy { font-size: 120px; cursor: pointer; transition: 0.3s; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)); }
         
-        /* PURE CSS LABUBU - POLISHED */
-        .labubu-css { width: 100px; height: 140px; position: relative; animation: waddle 0.8s infinite alternate ease-in-out; }
-        .labubu-body { width: 90px; height: 100px; background: #ff85a1; border-radius: 45%; position: absolute; bottom: 0; border: 3px solid #333; }
-        .labubu-face { width: 65px; height: 55px; background: #fffdf5; border-radius: 50%; position: absolute; top: 15px; left: 12px; border: 2px solid #333; }
-        .labubu-ear { width: 25px; height: 55px; background: #ff85a1; border-radius: 50% 50% 0 0; position: absolute; top: -40px; border: 3px solid #333; }
-        .ear-l { left: 15px; transform: rotate(-15deg); } .ear-r { right: 15px; transform: rotate(15deg); }
-        .labubu-eye { width: 12px; height: 16px; background: #333; border-radius: 50%; position: absolute; top: 15px; }
-        .eye-l { left: 15px; } .eye-r { right: 15px; }
+        .labubu { width: 140px; height: 180px; position: relative; animation: waddle 0.5s infinite alternate; }
+        .l-ear { position: absolute; width: 38px; height: 85px; background: var(--pink); border: 4px solid #333; border-radius: 50% 50% 15% 15%; top: -50px; }
+        .ear-l { left: 10px; transform: rotate(-18deg); } .ear-r { right: 10px; transform: rotate(18deg); }
+        .l-body { position: absolute; width: 100%; height: 130px; background: var(--pink); border: 4px solid #333; border-radius: 46%; bottom: 0; }
+        .l-face { position: absolute; width: 85%; height: 65%; background: #fff; border-radius: 50%; top: 12%; left: 7.5%; border: 3px solid #333; overflow: hidden;}
+        .eye { position:absolute; width:15px; height:15px; background:#333; border-radius:50%; top:35%; animation: blink 3s infinite; }
+        .l-mouth { 
+            position: absolute; width: 55px; height: 22px; background: #333; bottom: 15%; left: 50%; transform: translateX(-50%);
+            clip-path: polygon(0 0, 15% 100%, 30% 0, 45% 100%, 60% 0, 75% 100%, 90% 0, 100% 100%, 100% 0);
+        }
 
-        /* --- KEYFRAMES --- */
-        @keyframes floating { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-20px) rotate(5deg); } }
-        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        @keyframes waddle { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
-        @keyframes popUp { from { transform: scale(0) translateY(100px); } to { transform: scale(1) translateY(0); } }
-        .confetti { position: fixed; top: -50px; pointer-events: none; z-index: 1001; animation: fall linear forwards; }
-        @keyframes fall { to { transform: translateY(110vh) rotate(1080deg); opacity: 0; } }
+        @keyframes blink { 0%, 90%, 100% { height: 15px; } 95% { height: 2px; } }
+        
+        .floating-heart { position: absolute; font-size: 40px; pointer-events: none; animation: blowHeart 2s forwards; z-index: 100; }
+        @keyframes blowHeart { 
+            0% { transform: scale(0) translate(0,0); opacity: 1; }
+            100% { transform: scale(1.5) translate(100px, -200px); opacity: 0; }
+        }
+
+        .yes-btn {
+            background: linear-gradient(45deg, var(--deep-pink), var(--purple), var(--gold));
+            color: white; padding: 35px 140px; border-radius: 100px; font-family: 'Pacifico'; font-size: 3.5rem;
+            border: none; cursor: pointer; box-shadow: 0 40px 80px rgba(255, 117, 143, 0.4);
+            margin-top: 60px; transition: 0.8s; background-size: 200%;
+        }
+
+        @keyframes driftRotate { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(250px, 900px) rotate(1080deg); } }
+        @keyframes waddle { from { transform: rotate(-12deg); } to { transform: rotate(12deg); } }
+        @keyframes shine { to { background-position: 200% center; } }
     </style>
 </head>
 <body>
 
-    <audio id="music" loop><source src="https://www.mboxdrive.com/PanaginipInstrumental.mp3" type="audio/mpeg"></audio>
-    <div id="bg-canvas"></div>
-
-    <div id="cover-page" onclick="init()">
-        <div class="main-bouquet">💐</div>
-        <h1 style="font-family: 'Pacifico'; color: var(--pink); font-size: 4rem; margin: 20px 0;">Hi Kiarra!</h1>
-        <p style="letter-spacing: 8px; font-weight: bold; color: var(--deep-pink); text-transform: uppercase; font-size: 0.9rem;">Tap to start our story</p>
+    <div id="cover" onclick="ignite()">
+        <div class="bouquet" id="bq">💐</div>
+        <h1 style="font-family: 'Pacifico'; color: var(--pink); font-size: 5.5rem; margin-top: 20px;">For Kiarra</h1>
+        <p style="letter-spacing: 20px; color: var(--purple); font-weight: 800;">TAP TO START FOREVER</p>
     </div>
+
+    <svg id="path-svg" viewBox="0 0 400 7000">
+        <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:var(--pink);" />
+                <stop offset="50%" style="stop-color:var(--purple);" />
+                <stop offset="100%" style="stop-color:var(--deep-pink);" />
+            </linearGradient>
+        </defs>
+        <path id="master-path" class="arrow-line" d="M 200,0 C 500,1500 -100,3000 200,4500 S 500,6000 200,7000" />
+        <text><textPath href="#master-path" startOffset="0%" id="arrow-head"><tspan class="moving-star">✦</tspan></textPath></text>
+    </svg>
 
     <div id="main-content">
-        <div class="glass-card">
-            <h2 style="color: var(--pink); font-family: 'Pacifico'; font-size: 2rem;">Every Second With You...</h2>
-            <div id="timer" style="font-size: 2.5rem; color: var(--deep-pink); font-weight: bold; margin: 20px 0;"></div>
-            <p style="color: #888; font-style: italic;">Since January 17, 2026</p>
+        <div class="glass-card" style="margin-top: 150px; border: 8px solid var(--pink);">
+            <iframe width="100%" height="450" src="https://www.youtube.com/embed/Hz0qYk1WDEU" frameborder="0" style="border-radius: 60px;"></iframe>
+            <h3 style="font-family: 'Pacifico'; color: var(--deep-pink); font-size: 3rem; margin-top: 50px;">play first hehe</h3>
+        </div>
+
+        <div class="void" data-color="#fff5f8">
+            <div class="whisper" style="top: 20%;">You are the calm in my storm.</div>
+            <div class="whisper" style="top: 50%;">In every petal, I see your smile.</div>
+            <div class="whisper" style="top: 80%;">Every Lily reminds me of your purity.</div>
         </div>
 
         <div class="glass-card">
-            <div class="cursive-msg typewriter" id="msg">
-Dearest Kiarra,
-
-Since the day we started this journey, my world has been a garden of joy. 
-You are my favorite "Ngiti," and I cherish every single petal of your heart.
-            </div>
-            
-            <div class="flower-grid">
-                <div class="flower-item" title="Pink Lily">🌸</div>
-                <div class="flower-item" title="Tulip">🌷</div>
-                <div class="flower-item" title="Peony">🌺</div>
-                <div class="flower-item" title="Lotus">🪷</div>
-                <div class="flower-item" title="Daisy">🌼</div>
-                <div class="flower-item" title="Sunflower">🌻</div>
-            </div>
+            <h2 style="font-family: 'Pacifico'; color: var(--purple); font-size: 4.5rem;">Jan 17, 2026</h2>
+            <div id="timer" style="font-size: 4.5rem; font-weight: 900; margin: 40px 0; background: linear-gradient(45deg, var(--deep-pink), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></div>
         </div>
 
-        <div class="glass-card" style="padding: 10px; overflow: hidden;">
-            <iframe width="100%" height="300" src="https://www.youtube.com/embed/Hz0qYk1WDEU" frameborder="0" style="border-radius: 40px;"></iframe>
-            <div style="padding: 20px;">
-                <p style="font-weight: bold; color: var(--pink); font-size: 1.4rem; margin: 0;">Ngiti</p>
-                <p style="color: #888; margin: 5px 0 0;">The Juans</p>
-            </div>
+        <div class="void" data-color="#f3e5f5">
+            <div class="whisper" style="top: 25%;">"The path is long, but every step leads to you."</div>
+            <div class="whisper" style="top: 55%;">I carry your heart in mine.</div>
+            <div class="whisper" style="top: 85%;">A Peony for your heart...</div>
         </div>
 
-        <div class="glass-card" style="border: 2px solid var(--pink); background: rgba(255,255,255,0.6);">
-            <h2 class="cursive-msg typewriter" id="q">Kiarra, will you be my Valentine?</h2>
-            <div class="btn-container">
-                <button id="yes-btn" class="fancy-btn" onclick="startFinale()">YES! ❤️</button>
-                <button id="no-btn" class="fancy-btn" onmouseover="dodge()" ontouchstart="dodge()">No</button>
-            </div>
+        <div class="glass-card">
+            <p class="cursive-msg">You are<br>so beautiful.</p>
         </div>
+
+        <div class="void" data-color="#fffdeb">
+            <div class="whisper" style="top: 20%; color: var(--gold)">A sunflower, always facing the light.</div>
+            <div class="whisper" style="top: 50%; color: var(--gold)">You are my favorite view.</div>
+            <div class="whisper" style="top: 80%; color: var(--gold)">A Daisy for your simple beauty.</div>
+        </div>
+
+        <div class="eternal-box">
+            <h3>My Dearest, Kiarra</h3>
+            <p>
+                Walking this journey with you is the greatest joy I've ever known. 
+                Every second I spend moving towards you is a second I will always cherish. You aren't just a part of my life; 
+                you are the garden that makes my life worth living. 
+                <br><br>
+                No matter how long the path gets, I promise to always be the one walking beside you, 
+                holding your hand through every petal and every breeze.
+            </p>
+            <p style="text-align: right; font-family: 'Great Vibes'; font-size: 2.5rem; color: var(--purple); margin-top: 40px;">-Mikel.</p>
+        </div>
+
+        <div class="void" style="height: 500px;"></div>
+
+        <div class="glass-card" style="border: 12px double var(--pink); padding: 150px 50px;">
+            <h2 style="font-family: 'Pacifico'; color: var(--deep-pink); font-size: 5.5rem; margin-bottom: 20px;">Kiarra...</h2>
+            <p style="font-size: 3.5rem; color: var(--deep-purple); font-weight: 300;">Will you be my Valentine?</p>
+            <button class="yes-btn" onclick="finish()">YES! ❤️</button>
+        </div>
+
+        <div style="height: 1200px;"></div>
     </div>
 
-    <div id="celebration">
-        <h1 style="color: var(--pink); font-family: 'Pacifico'; font-size: 3rem; text-align: center; padding: 20px;">I'm the luckiest! 💖</h1>
-        <div class="char-group">
-            <div class="labubu-css">
-                <div class="labubu-ear ear-l"></div><div class="labubu-ear ear-r"></div>
-                <div class="labubu-body">
-                    <div class="labubu-face">
-                        <div class="labubu-eye eye-l"></div><div class="labubu-eye eye-r"></div>
+    <div id="finale">
+        <h1 style="font-family: 'Pacifico'; background: linear-gradient(to right, var(--pink), var(--purple), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 6rem; margin-bottom: 30px;">Yeyyy!</h1>
+        <div class="stage" id="labubu-stage">
+            <div style="font-size: 180px;">👦🏻</div>
+            <div class="labubu">
+                <div class="l-ear ear-l"></div><div class="l-ear ear-r"></div>
+                <div class="l-body">
+                    <div class="l-face">
+                        <div class="eye" style="left:22%;"></div>
+                        <div class="eye" style="right:22%;"></div>
+                        <div class="l-mouth"></div>
                     </div>
                 </div>
             </div>
-            <div class="me-guy" id="me" onclick="smile()">👦🏻</div>
         </div>
-        <p style="color: var(--pink); font-weight: bold; margin-top: 30px; letter-spacing: 2px;">See you on the 14th! (Tap me!)</p>
+        <p style="margin-top: 50px; font-size: 1.5rem; letter-spacing: 5px; color: var(--deep-pink); font-weight: 400; opacity: 0.8; font-family: 'Montserrat';">Message me when you're done!</p>
     </div>
 
     <script>
-        // 1. ELEVATED BACKGROUND HEARTS
-        function createHearts() {
-            const canvas = document.getElementById('bg-canvas');
-            for(let i=0; i<30; i++) {
-                const h = document.createElement('div');
-                h.className = 'floating-heart'; h.innerHTML = '❤️';
-                h.style.left = Math.random()*100+'vw';
-                h.style.fontSize = (Math.random()*15+15)+'px';
-                h.style.setProperty('--d', (Math.random()*6+4)+'s');
-                h.style.animationDelay = Math.random()*5+'s';
-                canvas.appendChild(h);
+        const flowers = ['🌷', '⚜️', '🌸', '🪷', '🌼', '🌻'];
+        
+        document.querySelectorAll('.void').forEach(v => {
+            const layers = ['layer-back', 'layer-mid', 'layer-front'];
+            for(let i=0; i<45; i++){
+                let f = document.createElement('div');
+                let layer = layers[Math.floor(Math.random()*layers.length)];
+                f.className = `drift-flower ${layer}`;
+                f.innerHTML = flowers[Math.floor(Math.random()*flowers.length)];
+                f.style.left = Math.random()*100+'%';
+                f.style.top = Math.random()*100+'%';
+                f.style.fontSize = (layer === 'layer-back' ? 25 : layer === 'layer-mid' ? 50 : 85) + 'px';
+                f.style.animationDuration = (Math.random()*10 + 15) + 's';
+                v.appendChild(f);
             }
-        }
-        createHearts();
+        });
 
-        // 2. SCROLL REVEAL & CURSIVE TYPEWRITER
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('reveal');
-                    const writer = entry.target.querySelector('.typewriter');
-                    if (writer) applyTypewriter(writer.id);
-                }
-            });
-        }, { threshold: 0.2 });
-
-        function applyTypewriter(id) {
-            const el = document.getElementById(id);
-            if (el.dataset.done) return;
-            const text = el.innerText; el.innerText = '';
-            text.split('').forEach((char, i) => {
-                const span = document.createElement('span');
-                if (char === ' ') span.classList.add('space');
-                span.innerText = char;
-                span.style.animationDelay = (i * 0.05) + 's';
-                el.appendChild(span);
-            });
-            el.dataset.done = "true";
-        }
-
-        function init() {
-            document.getElementById('music').play().catch(()=>{});
-            document.getElementById('cover-page').style.opacity = '0';
-            document.getElementById('cover-page').style.transform = 'scale(2)';
+        function spawnTrail(x, y) {
+            const h = document.createElement('div');
+            h.className = 'trail-flower';
+            h.innerHTML = flowers[Math.floor(Math.random()*flowers.length)];
+            h.style.left = x + 'px'; h.style.top = y + 'px';
+            h.style.fontSize = (Math.random()*30+25)+'px';
+            document.body.appendChild(h);
             setTimeout(() => {
-                document.getElementById('cover-page').style.display = 'none';
+                h.style.transform = `translate(${(Math.random()-0.5)*400}px, -600px) rotate(${Math.random()*1000}deg) scale(0)`;
+                h.style.opacity = '0';
+            }, 50);
+            setTimeout(() => h.remove(), 1800);
+        }
+        
+        document.addEventListener('mousemove', (e) => spawnTrail(e.clientX, e.clientY));
+        document.addEventListener('touchstart', (e) => spawnTrail(e.touches[0].clientX, e.touches[0].clientY));
+
+        function ignite() {
+            document.getElementById('bq').style.transform = 'scale(20) rotate(720deg)';
+            document.getElementById('cover').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('cover').style.display = 'none';
                 document.getElementById('main-content').style.display = 'flex';
-                document.querySelectorAll('.glass-card').forEach(card => observer.observe(card));
-            }, 1000);
+                const obs = new IntersectionObserver((entries) => {
+                    entries.forEach(e => { 
+                        if(e.isIntersecting) {
+                            e.target.classList.add('active');
+                            if(e.target.dataset.color) document.body.style.background = e.target.dataset.color;
+                        }
+                    });
+                }, { threshold: 0.1 });
+                document.querySelectorAll('.glass-card, .void, .eternal-box').forEach(c => obs.observe(c));
+            }, 1800);
         }
 
-        // 3. PRECISION TIMER
         function updateTimer() {
-            const start = new Date("January 17, 2026 00:00:00").getTime();
-            const diff = new Date().getTime() - start;
+            const diff = new Date() - new Date("January 17, 2026");
             const d = Math.floor(diff / 86400000);
             const h = Math.floor((diff % 86400000) / 3600000);
             const m = Math.floor((diff % 3600000) / 60000);
             const s = Math.floor((diff % 60000) / 1000);
-            document.getElementById('timer').innerHTML = `${d}d ${h}h ${m}m ${s}s`;
+            document.getElementById('timer').innerText = `${d}d ${h}h ${m}m ${s}s`;
         }
         setInterval(updateTimer, 1000);
 
-        function dodge() {
-            const btn = document.getElementById('no-btn');
-            btn.style.left = Math.random()*70+'%';
-            btn.style.top = (Math.random()*100 - 50)+'px';
-        }
+        window.addEventListener('scroll', () => {
+            const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            const head = document.getElementById('arrow-head');
+            if(head) head.setAttribute('startOffset', Math.min(scrollPercent, 99.9) + '%');
+            
+            const dot = document.createElement('div');
+            dot.className = 'dust';
+            dot.style.left = (Math.random()*100) + 'vw';
+            dot.style.top = (window.scrollY + Math.random()*200) + 'px';
+            document.body.appendChild(dot);
+            setTimeout(() => dot.remove(), 2000);
+        });
 
-        // 4. FLOWER EXPLOSION
-        function startFinale() {
-            document.getElementById('main-content').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('main-content').style.display = 'none';
-                document.getElementById('celebration').style.display = 'flex';
-                
-                const flowers = ['🌸', '🌷', '🌺', '🪷', '🌼', '🌻', '✨', '💖'];
-                for(let i=0; i<100; i++) {
-                    setTimeout(() => {
-                        const c = document.createElement('div');
-                        c.className = 'confetti';
-                        c.innerHTML = flowers[Math.floor(Math.random()*flowers.length)];
-                        c.style.left = Math.random()*100+'vw';
-                        c.style.fontSize = (Math.random()*25+15)+'px';
-                        c.style.animationDuration = (Math.random()*3 + 2)+'s';
-                        document.body.appendChild(c);
-                        setTimeout(() => c.remove(), 5000);
-                    }, i * 50);
-                }
-            }, 500);
-        }
+        function finish() {
+            document.getElementById('finale').style.display = 'flex';
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = '50%'; heart.style.top = '50%';
+                document.getElementById('finale').appendChild(heart);
+                setTimeout(() => heart.remove(), 2000);
+            }, 600);
 
-        function smile() {
-            const me = document.getElementById('me');
-            me.innerText = '😊';
-            me.style.transform = 'scale(1.3)';
-            // Mini burst
-            for(let i=0; i<5; i++) {
-                const s = document.createElement('div');
-                s.innerHTML = '✨'; s.style.position = 'absolute';
-                s.style.left = '50%'; s.style.top = '50%';
-                s.style.transition = '1s';
-                document.querySelector('.char-group').appendChild(s);
+            for(let i=0; i<300; i++) {
+                const c = document.createElement('div');
+                c.innerHTML = flowers[Math.floor(Math.random()*flowers.length)];
+                c.style.position = 'fixed'; c.style.left = Math.random()*100+'vw';
+                c.style.top = '-100px'; c.style.fontSize = (Math.random()*50+30)+'px';
+                c.style.zIndex = '10001'; c.style.transition = (Math.random()*3+5)+'s';
+                document.body.appendChild(c);
                 setTimeout(() => {
-                    s.style.transform = `translate(${(Math.random()-0.5)*200}px, -200px)`;
-                    s.style.opacity = '0';
-                }, 10);
+                    c.style.transform = `translateY(110vh) rotate(${Math.random()*2000}deg)`;
+                    c.style.opacity = '0';
+                }, 100);
             }
         }
     </script>
